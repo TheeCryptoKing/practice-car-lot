@@ -1,30 +1,17 @@
 {
   "cars": [
     {
-      "car_make": "Toyota",
-      "car_model": "Camry",
-      "car_model_year": "2015",
-      "color": "Black",
-      "mileage": "35555",
-      "price": "27150.98",
-      "transmission": "Manual",
-      "fuel_type": "Electric",
-      "condition": "Certified Pre-Owned",
-      "id": 1,
-      "image": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQ5w-4w-MyMsdCXNh1tcP_gjDYlhp9L19f1CLD-wAunfOtVVN6R"
-    },
-    {
-      "car_make": "Audi",
-      "car_model": "A4",
-      "car_model_year": "2015",
-      "color": "Gray",
-      "mileage": "55500",
-      "price": "19000.15",
-      "transmission": "Automatic",
-      "fuel_type": "Gasoline",
-      "condition": "New",
+      "car_make": "",
+      "car_model": "",
+      "car_model_year": 0,
+      "color": "",
+      "mileage": 0,
+      "price": 0,
+      "transmission": "",
+      "fuel_type": "",
+      "condition": "",
       "id": 2,
-      "image": "https://images.dealersync.com/cloud/userdocumentprod/2077/Photos/141891/wm_c7effa08c4994ccd9c57edac8747cae9_141891.jpg?_=c61eddf53a07f48992a34c0f7ca376dc8b17c583"
+      "image": ""
     },
     {
       "car_make": "Ford",
@@ -114,6 +101,19 @@
       "image": "https://images.autotrader.com/hn/c/9c2d681a1003464ca91e101378c9f19f.jpg",
       "color": "White",
       "id": 9
+    },
+    {
+      "car_make": "audi 50000",
+      "car_model": "audi",
+      "car_model_year": "2019",
+      "color": "Black ",
+      "mileage": "123456",
+      "price": "123456",
+      "transmission": "",
+      "fuel_type": "",
+      "condition": "",
+      "id": 10,
+      "image": ""
     }
   ]
 }

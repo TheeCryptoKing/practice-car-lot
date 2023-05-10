@@ -10,38 +10,90 @@ import Button from "@mui/material/Button";
 
 import React, {useState} from "react";
 
-function Car() {
+function Car({ car, onDelete, onUpdate }) {
+  const [editForm, setEditForm] = useState({
+    "car_make": car.car_make,
+    "car_model": car.car_model,
+    "car_model_year": car.car_model_year,
+    "color": car.color,
+    "mileage": car.mileage,
+    "price": car.price,
+    "transmission": car.transmission,
+    "fuel_type": car.fuel_type,
+    "condition": car.condition,
+    "id": car.id,
+    "image": car.image
+  })
+
+    function handleEditForm(e) {
+      setEditForm({...editForm, [e.target.name] : e.target.value})
+    }
+
+
+    function handlePatch(e) {
+    e.preventDefault()
+    fetch(`http://localhost:3001/cars/${car.id}`,{
+        method: 'PATCH',
+        headers: {
+            'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify(editForm)
+      })
+      .then((resp) => resp.json())
+      .then((data) =>onUpdate(data))
+    }
+
+
+  function handleDelete(e) {
+    e.preventDefault()
+    fetch(`http://localhost:3001/cars/${car.id}` , {
+      method: 'DELETE',
+    })
+    .then(res => res.json())
+    .then(() => {
+      onDelete(car.id)
+    })
+    }//works but only works after refresh 
+  
+
+    //make form appear 
   const [showForm, setShowForm] = useState(false);
+
+  function handleSetForm() {
+    setShowForm(intialshowForm => !intialshowForm )
+  }
+  //make cancel button 
 
   return (
     <Grid item xs={2} sm={4} md={4}>
       {/**can edit below this */}
       {!showForm ? (
         <Card sx={{maxWidth: 350, height: 600}}>
-          <CardHeader title={`TITLE`} sx={{fontSize: "20px"}} />
+          <CardHeader title={car.car_model_year + " " + car.car_make + " " + car.car_model} sx={{fontSize: "20px"}} />
           <CardMedia
             component="img"
             height="250"
-            image="{/**image*/}"
-            alt={`YEAR MAKE MODEL`}
+            image={car.image}
+            alt={car.car_model_year + " " + car.car_make + " " + car.car_model}
           />
           <CardContent>
             <Typography variant="h5" color="text.secondary" align="center">
-              ${/**PRICE */}
+              ${car.price}
             </Typography>
           </CardContent>
           <CardContent>
-            <Typography paragraph>Condition: {/** */}</Typography>
-            <Typography paragraph>Mileage: {/** */}</Typography>
-            <Typography paragraph>Color: {/** */}</Typography>
+            <Typography paragraph>Condition: {car.condition}</Typography>
+            <Typography paragraph>Mileage: {car.mileage}</Typography>
+            <Typography paragraph>Color: {car.color}</Typography>
           </CardContent>
           <CardContent className="flex justify-around">
-            <Button variant="contained">Edit</Button>
-            <Button variant="contained">Mark Sold</Button>
+          {/* onChange={} */}
+            <Button variant="contained" onClick={handleSetForm} >Edit</Button>
+            <Button variant="contained" onClick={handleDelete} >Mark Sold</Button>
           </CardContent>
         </Card>
       ) : (
-        <form id="car-form" className="sale-form">
+        <form id="car-form" className="sale-form" onSubmit={handlePatch}>
           <div className="row">
             <div className="left">
               <label htmlFor="car_model_year">YEAR</label>
@@ -51,7 +103,10 @@ function Car() {
                 name="car_model_year"
                 id="year-input"
                 required
-                aria-required="true">
+                aria-required="true"
+                value={editForm.car_model_year}
+                onChange={handleEditForm}
+                >
                 <option value=""></option>
                 <option value="2023">2023</option>
                 <option value="2022">2022</option>
@@ -83,6 +138,8 @@ function Car() {
                 required
                 aria-required="true"
                 minLength="2"
+                value={editForm.car_make}
+                onChange={handleEditForm}
               />
             </div>
           </div>
@@ -98,6 +155,8 @@ function Car() {
                 id="model-form"
                 required
                 aria-required="true"
+                value={editForm.car_model}
+                onChange={handleEditForm}
               />
             </div>
           </div>
@@ -116,6 +175,8 @@ function Car() {
                 aria-required="true"
                 minLength="3"
                 maxLength="10"
+                value={editForm.price}
+                onChange={handleEditForm}
               />
             </div>
           </div>
@@ -129,7 +190,10 @@ function Car() {
                 name="condition"
                 id="condition-form"
                 required
-                aria-required="true">
+                aria-required="true"
+                value={editForm.condition}
+                onChange={handleEditForm}
+                >
                 <option value="New">New</option>
                 <option value="Used">Used</option>
                 <option value="Certified Pre-Owned">Certified Pre-Owned</option>
@@ -149,6 +213,8 @@ function Car() {
                 required
                 aria-required="true"
                 maxLength="7"
+                value={editForm.mileage}
+                onChange={handleEditForm}
               />
             </div>
           </div>
@@ -165,6 +231,8 @@ function Car() {
                 required
                 aria-required="true"
                 minLength="3"
+                value={editForm.color}
+                onChange={handleEditForm}
               />
             </div>
           </div>
@@ -180,7 +248,7 @@ function Car() {
 
           <div className="row">
             <input type="submit" id="submit-btn" value="SAVE" />
-            <input type="button" id="cancel-btn" value="CANCEL" />
+            <input type="button" onClick={handleSetForm} id="cancel-btn" value="CANCEL" />
           </div>
         </form>
       )}

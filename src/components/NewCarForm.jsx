@@ -1,16 +1,54 @@
 import React, {useState} from "react";
 
-function NewCarForm() {
+function NewCarForm({ onNewCar }) {
   const [showForm, setShowForm] = useState(false);
+  
+  const intialForm = {
+    "car_make": "",
+    "car_model": "",
+    "car_model_year": 0,
+    "color": "",
+    "mileage": 0,
+    "price": 0,
+    "transmission": "",
+    "fuel_type": "",
+    "condition": "",
+    "id": 0,
+    "image": ""
+  }
+
+  const [form, setNewForm] = useState(intialForm)
 
   function toggleForm() {
     setShowForm(prevShowForm => !showForm);
   }
 
+    function handleForm(e) {
+      setNewForm({ ...form, 
+      [e.target.name] : e.target.value
+      })
+    }
+
+    function handleSubmit(e) {
+      e.preventDefault()
+      fetch(`http://localhost:3001/cars`,{
+          method: 'POST',
+          headers: {
+              'Content-Type' : 'application/json'
+          },
+          body: JSON.stringify(form)
+        })
+        .then((resp) => resp.json())
+        .then((newCAR) => {onNewCar(newCAR)
+        })
+        setNewForm(intialForm)
+    }
+      
+
   return (
     <div className="new_car_form">
       {showForm ? (
-        <form id="car-form" className="sale-form">
+        <form id="car-form" className="sale-form" onSubmit={handleSubmit}>
           <div className="row">
             <div className="left">
               <label htmlFor="car_model_year">YEAR</label>
@@ -20,7 +58,10 @@ function NewCarForm() {
                 name="car_model_year"
                 id="year-input"
                 required
-                aria-required="true">
+                aria-required="true"
+                value={form.car_model_year}
+                onChange={handleForm}
+                >
                 <option value=""></option>
                 <option value="2023">2023</option>
                 <option value="2022">2022</option>
@@ -52,6 +93,8 @@ function NewCarForm() {
                 required
                 aria-required="true"
                 minLength="2"
+                value={form.car_make}
+                onChange={handleForm}
               />
             </div>
           </div>
@@ -67,6 +110,8 @@ function NewCarForm() {
                 id="model-form"
                 required
                 aria-required="true"
+                value={form.car_model}
+                onChange={handleForm}
               />
             </div>
           </div>
@@ -85,6 +130,8 @@ function NewCarForm() {
                 aria-required="true"
                 minLength="3"
                 maxLength="10"
+                value={form.price}
+                onChange={handleForm}
               />
             </div>
           </div>
@@ -98,7 +145,10 @@ function NewCarForm() {
                 name="condition"
                 id="condition-form"
                 required
-                aria-required="true">
+                aria-required="true"
+                value={form.condition}
+                onChange={handleForm}
+                >
                 <option value="New">New</option>
                 <option value="Used">Used</option>
                 <option value="Certified Pre-Owned">Certified Pre-Owned</option>
@@ -118,6 +168,8 @@ function NewCarForm() {
                 required
                 aria-required="true"
                 maxLength="7"
+                value={form.mileage}
+                onChange={handleForm}
               />
             </div>
           </div>
@@ -134,6 +186,8 @@ function NewCarForm() {
                 required
                 aria-required="true"
                 minLength="3"
+                value={form.color}
+                onChange={handleForm}
               />
             </div>
           </div>
@@ -143,7 +197,9 @@ function NewCarForm() {
               <label htmlFor="image">IMAGE URL</label>
             </div>
             <div className="right">
-              <input type="text" name="image" id="image_url" />
+              <input type="text" name="image" id="image_url" value={form.image}
+                onChange={handleForm}
+              />
             </div>
           </div>
 
